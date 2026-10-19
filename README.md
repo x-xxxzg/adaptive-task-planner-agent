@@ -30,20 +30,35 @@ cd C:\Users\xyh_0\dev\adaptive-task-planner-agent
 > PowerShell 默认禁止运行脚本（ExecutionPolicy 为 Restricted），
 > 直接写全路径可以完全绕开激活步骤，不会踩到这个坑。
 
-## 推 GitHub 前必读：Clash 代理
+## 访问 GitHub（2026-10-19 实测更新）
 
-本机 git 全局配置了 `http.proxy` / `https.proxy` 指向 `127.0.0.1:7890`（Clash）。
-**Clash 没运行时，所有 clone / push / pull 会直接失败**，报错形如
-`Failed to connect to github.com:443 over proxy 127.0.0.1`。
+**本机直连 GitHub 可用，不需要任何代理。** 实测数据：
 
-处理方式二选一：
+| 测试项 | 结果 |
+| --- | --- |
+| `curl https://github.com` | HTTP 200，耗时 2.26s |
+| `git clone` 公开仓库 | 成功 |
+| `git ls-remote` 自己的仓库 | 成功（HEAD = `67085d9d`） |
+
+之前推不动的真正原因：gitignore 全局配置写死了 `http.proxy = 127.0.0.1:7890`（曾经的 Clash 端口），
+而 Clash 已经停用 → 每次连接都卡在 `"Failed to connect to github.com:443 over proxy 127.0.0.1"`。
+**该代理配置已于 2026-10-19 清除**，现在 `git push` / `clone` 直接走直连。
+
+> 以后如果又遇到同类报错，用这条判断：
+> ```powershell
+> git ls-remote --heads origin
+> ```
+> 秒回就是网络没问题；报 `over proxy 127.0.0.1` 说明又被代理劫持了，临时绕开的办法是
+> `git -c http.proxy= -c https.proxy= <命令>`。
+
+将来若某天觉得速度慢想重新挂 Clash：
 
 ```powershell
-# 方式一：开着 Clash 再操作（推荐，直连国内常不通）
-git push
-
-# 方式二：临时绕过代理单次操作
-git -c http.proxy= -c https.proxy= push
+git config --global http.proxy http://127.0.0.1:7890
+git config --global https.proxy http://127.0.0.1:7890
+# 恢复直连：
+git config --global --unset http.proxy
+git config --global --unset https.proxy
 ```
 
 ## 首次推送
