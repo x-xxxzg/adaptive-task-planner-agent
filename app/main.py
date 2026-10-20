@@ -1,21 +1,42 @@
-"""FastAPI 应用入口。
+#此文件时用来定义URL和HTTP方法，收强求、调校验、调算法，把结果转成json返回
 
-本文件只保留最小可运行骨架，用来验证环境是否正常。
-后续按教程把真正的接口写在这里。
-"""
-
+#导入一个类，这个类可以帮我写http接口,可以帮我建立url，检查字段合法，自动生成Swagger文档页
 from fastapi import FastAPI
 
-app = FastAPI(title="Adaptive Task Planner Agent")
+#造一个应用对象，名字叫app，是一个空的路由表
+app = FastAPI(title="自适应任务规划助手") #**
+
+#注册，建立url。并在表里加一行GET /health
+@app.get("/health")
+#函数负责GET /health
+def health_check():
+    return {"status": "ok"} #返回一个字典，FastAPI自动转成JSON
 
 
-@app.get("/")
-def index() -> dict[str, str]:
-    """根路径：返回一条问候，用来确认服务已启动。"""
-    return {"message": "Adaptive Task Planner Agent 已启动"}
 
 
-if __name__ == "__main__":
-    import uvicorn
 
-    uvicorn.run(app, host="127.0.0.1", port=8000)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
