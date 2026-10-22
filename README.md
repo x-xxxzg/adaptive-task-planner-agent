@@ -75,3 +75,7 @@ git push -u origin main
 ```
 
 登录提示会由 Git Credential Manager 弹出，用 GitHub 账号登录即可（不要用账号密码）。
+
+## 数据
+任务数据保存在 data/planner.db（SQLite，本地文件，不提交到 Git）。
+服务启动时会自动建表，无需手动初始化。
