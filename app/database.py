@@ -1,5 +1,35 @@
-"""数据库层（待按教程填写）。
+import sqlite3
+from contextlib import contextmanager
+from pathlib import Path
 
-用途：负责建库、建表、获取连接与增删改查函数，
-让 main.py 只处理 HTTP，不直接碰 SQL。
-"""
+DB_PATH = Path(__file__).resolve().parent.parent / "data" / "planner.db"
+DB_PATH.parent.mkdir(parents=True, exist_ok=True)
+
+@contextmanager
+def connection():
+    
+    conn = sqlite3.connect(DB_PATH)
+    conn.row_factory = sqlite3.Row
+
+    try:
+        yield conn 
+        conn.commit()
+    except Exception:
+        conn.rollback()
+        raise         
+    finally:
+        conn.close()
+
+def init_db():
+    with connection() as conn:
+        conn.execute("""
+            CREATE TABLE IF NOT EXISTS tasks(
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                title TEXT NOT NULL,
+                deadline TEXT NOT NULL,
+                estimated_minutes INTEGER NOT NULL CHECK(estimated_minutes > 0),
+                priority TEXT NOT NULL CHECK(priority IN ('low','medium','high')),
+                status TEXT NOT NULL DEFAULT 'pending',
+                created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+            )
+        """)

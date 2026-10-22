@@ -1,10 +1,10 @@
 from fastapi import FastAPI , status
 from app.models import TaskCreate , TaskRead
+from app.database import connection, init_db
 
 app = FastAPI(title="自适应任务规划助手")
 
-tasks: list[TaskRead] = []
-next_id = 1
+init_db()
 
 @app.get("/health")
 def health_check():
@@ -12,38 +12,20 @@ def health_check():
 
 @app.post("/tasks",response_model=TaskRead,status_code = status.HTTP_201_CREATED)
 def create_task(payload: TaskCreate):
-    global next_id
-    task = TaskRead(id = next_id , **payload.model_dump())  #需要id和和传进来的对象转换未字典，塞进TaskCreate里面
-    tasks.append(task)
-    next_id += 1
-    return task
+    with connection() as conn:
+        cursor = conn.execute("""
+            INSERT INTO tasks (title,deadline,estimated_minutes,priority)
+            VALUES(?,?,?,?)""",
+            (payload.title,payload.deadline.isoformat(),payload.estimated_minutes,payload.priority)
+       )
+        task_id = cursor.lastrowid
+    return TaskRead(id=task_id,**payload.model_dump())
 
 @app.get("/tasks",response_model=list[TaskRead])
 def list_tasks():
-    return tasks
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    with connection() as conn:
+        rows = conn.execute("""
+                SELECT id , title, deadline, estimated_minutes, priority, status FROM tasks ORDER BY deadline ,id
+        """).fetchall()
+    return [TaskRead(**dict(row)) for row in rows]
 
