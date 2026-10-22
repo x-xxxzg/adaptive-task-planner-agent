@@ -1,19 +1,26 @@
-#此文件时用来定义URL和HTTP方法，收强求、调校验、调算法，把结果转成json返回
+from fastapi import FastAPI , status
+from app.models import TaskCreate , TaskRead
 
-#导入一个类，这个类可以帮我写http接口,可以帮我建立url，检查字段合法，自动生成Swagger文档页
-from fastapi import FastAPI
+app = FastAPI(title="自适应任务规划助手")
 
-#造一个应用对象，名字叫app，是一个空的路由表
-app = FastAPI(title="自适应任务规划助手") #**
+tasks: list[TaskRead] = []
+next_id = 1
 
-#注册，建立url。并在表里加一行GET /health
 @app.get("/health")
-#函数负责GET /health
 def health_check():
-    return {"status": "ok"} #返回一个字典，FastAPI自动转成JSON
+    return ({"status":"ok"})
 
+@app.post("/tasks",response_model=TaskRead,status_code = status.HTTP_201_CREATED)
+def create_task(payload: TaskCreate):
+    global next_id
+    task = TaskRead(id = next_id , **payload.model_dump())  #需要id和和传进来的对象转换未字典，塞进TaskCreate里面
+    tasks.append(task)
+    next_id += 1
+    return task
 
-
+@app.get("/tasks",response_model=list[TaskRead])
+def list_tasks():
+    return tasks
 
 
 
