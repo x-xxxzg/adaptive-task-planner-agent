@@ -33,3 +33,22 @@ def init_db():
                 created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
             )
         """)
+        conn.execute("""
+            CREATE TABLE IF NOT EXISTS day_settings(
+                target_date TEXT PRIMARY KEY,
+                available_start TEXT NOT NULL,
+                available_end TEXT NOT NULL,
+                daily_limit_minutes INTEGER NOT NULL CHECK(daily_limit_minutes > 0 AND daily_limit_minutes <= 720),
+                break_minutes INTEGER NOT NULL CHECK(break_minutes >= 0 AND break_minutes <= 60)
+            )
+        """)
+        conn.execute("""
+            CREATE TABLE IF NOT EXISTS fixed_events(
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                target_date TEXT NOT NULL,
+                title TEXT NOT NULL,
+                start_time TEXT NOT NULL,
+                end_time TEXT NOT NULL CHECK(start_time < end_time)
+            )
+        """)
+
