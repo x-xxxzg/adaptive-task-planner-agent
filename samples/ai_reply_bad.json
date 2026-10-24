@@ -1,0 +1,53 @@
+{
+  "_说明": "故意出错的样例，用来测试 validate_plan 和重试循环。它格式合法（能通过 Pydantic），但违反了三条业务约束。",
+  "_预期被抓到的问题": [
+    "2026-10-24 排了 150 分钟，超过每天可用的 120 分钟",
+    "2026-10-24 两个时段之间没有留休息间隔",
+    "英语累计 150 分钟，目标是 300 分钟（排不够且没有写进 unmet_goals）",
+    "语文累计 120 分钟，目标是 180 分钟（排不够且没有写进 unmet_goals）"
+  ],
+  "daily_plans": [
+    {
+      "plan_date": "2026-10-24",
+      "total_minutes": 150,
+      "blocks": [
+        {
+          "goal_title": "英语四级词汇",
+          "start_time": "19:00:00",
+          "end_time": "20:30:00",
+          "minutes": 90,
+          "reason": "优先级最高，安排在精力最好的前段"
+        },
+        {
+          "goal_title": "语文古诗文",
+          "start_time": "20:30:00",
+          "end_time": "21:30:00",
+          "minutes": 60,
+          "reason": "紧接英语安排，没有留休息时间"
+        }
+      ]
+    },
+    {
+      "plan_date": "2026-10-25",
+      "total_minutes": 120,
+      "blocks": [
+        {
+          "goal_title": "英语四级词汇",
+          "start_time": "19:00:00",
+          "end_time": "20:00:00",
+          "minutes": 60,
+          "reason": "第二天减少英语时长"
+        },
+        {
+          "goal_title": "语文古诗文",
+          "start_time": "20:10:00",
+          "end_time": "21:10:00",
+          "minutes": 60,
+          "reason": "留了 10 分钟休息"
+        }
+      ]
+    }
+  ],
+  "unmet_goals": [],
+  "warnings": []
+}

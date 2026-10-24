@@ -1,0 +1,111 @@
+{
+  "request": {
+    "start_date": "2026-10-24",
+    "end_date": "2026-10-30",
+    "available_start": "19:00:00",
+    "available_end": "22:00:00",
+    "daily_limit_minutes": 120,
+    "break_minutes": 10,
+    "study_order": "by_priority",
+    "goals": [
+      {
+        "title": "英语四级词汇",
+        "total_minutes": 300,
+        "deadline": "2026-10-28",
+        "priority": "high"
+      },
+      {
+        "title": "语文古诗文",
+        "total_minutes": 180,
+        "deadline": "2026-10-30",
+        "priority": "medium"
+      }
+    ]
+  },
+  "response": {
+    "daily_plans": [
+      {
+        "plan_date": "2026-10-24",
+        "total_minutes": 120,
+        "blocks": [
+          {
+            "goal_title": "英语四级词汇",
+            "start_time": "19:00:00",
+            "end_time": "20:30:00",
+            "minutes": 90,
+            "reason": "优先级最高，安排在精力最好的前段"
+          },
+          {
+            "goal_title": "语文古诗文",
+            "start_time": "20:40:00",
+            "end_time": "21:10:00",
+            "minutes": 30,
+            "reason": "英语之后换科目，避免单一科目疲劳"
+          }
+        ]
+      },
+      {
+        "plan_date": "2026-10-25",
+        "total_minutes": 120,
+        "blocks": [
+          {
+            "goal_title": "英语四级词汇",
+            "start_time": "19:00:00",
+            "end_time": "20:30:00",
+            "minutes": 90,
+            "reason": "保持高优先级科目的连续性"
+          },
+          {
+            "goal_title": "语文古诗文",
+            "start_time": "20:40:00",
+            "end_time": "21:10:00",
+            "minutes": 30,
+            "reason": "每日上限剩余 30 分钟，全部给语文"
+          }
+        ]
+      },
+      {
+        "plan_date": "2026-10-26",
+        "total_minutes": 120,
+        "blocks": [
+          {
+            "goal_title": "英语四级词汇",
+            "start_time": "19:00:00",
+            "end_time": "20:30:00",
+            "minutes": 90,
+            "reason": "英语累计将达 270 分钟，接近目标"
+          },
+          {
+            "goal_title": "语文古诗文",
+            "start_time": "20:40:00",
+            "end_time": "21:10:00",
+            "minutes": 30,
+            "reason": "语文按天稳步推进"
+          }
+        ]
+      },
+      {
+        "plan_date": "2026-10-27",
+        "total_minutes": 120,
+        "blocks": [
+          {
+            "goal_title": "英语四级词汇",
+            "start_time": "19:00:00",
+            "end_time": "19:30:00",
+            "minutes": 30,
+            "reason": "英语只剩 30 分钟即可达标，且必须在 10-28 前完成"
+          },
+          {
+            "goal_title": "语文古诗文",
+            "start_time": "19:40:00",
+            "end_time": "21:10:00",
+            "minutes": 90,
+            "reason": "英语完成后，当天剩余额度全部给语文"
+          }
+        ]
+      }
+    ],
+    "unmet_goals": [],
+    "warnings": []
+  }
+}
